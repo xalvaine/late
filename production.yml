@@ -1,0 +1,46 @@
+version: '3.8'
+
+services:
+  pg:
+    restart: always
+    image: postgres:13-alpine
+    env_file:
+      - .env
+    volumes:
+      - pg:/var/lib/postgresql/data
+    networks:
+      - app-network
+
+  pgadmin:
+    restart: always
+    image: dpage/pgadmin4
+    env_file:
+      - .env
+    volumes:
+      - pgadmin:/var/lib/pgadmin
+    networks:
+      - app-network
+    ports:
+      - '80:80'
+
+  bot:
+    depends_on:
+      - pg
+    build:
+      context: .
+    env_file:
+      - .env
+    volumes:
+      - bot_node_modules:/home/app/node_modules
+    working_dir: /home/app
+    command: yarn start:prod
+    networks:
+      - app-network
+
+volumes:
+  pg:
+  pgadmin:
+  bot_node_modules:
+
+networks:
+  app-network:

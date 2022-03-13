@@ -1,0 +1,6 @@
+{
+  "watch": ["src/**", "ormconfig.ts", "tsconfig.json"],
+  "verbose": false,
+  "ext": "ts",
+  "exec": "swc src --out-dir dist && node dist/main.js"
+}
