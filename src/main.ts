@@ -139,7 +139,7 @@ bot.action(/delay .*/, async (ctx) => {
   const colleague = await colleagueRepository.findOne({ name })
   await delayRepository.save({ colleague })
 
-  ctx.reply(`Опоздание добавлено`)
+  ctx.reply(`Опоздание добавлено (${colleague?.name})`)
   ctx.answerCbQuery()
 })
 
