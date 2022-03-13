@@ -24,6 +24,7 @@ services:
       - '80:80'
 
   bot:
+    restart: always
     depends_on:
       - pg
     build:
