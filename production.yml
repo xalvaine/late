@@ -21,7 +21,7 @@ services:
     networks:
       - app-network
     ports:
-      - '80:80'
+      - '8000:80'
 
   bot:
     restart: always
