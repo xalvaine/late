@@ -84,9 +84,16 @@ bot.command(`add_delay`, async (ctx) => {
 })
 
 bot.command(`reset_delays`, async (ctx) => {
+  const chatRepository = getRepository(Chat)
   const delaysRepository = getRepository(Delay)
 
-  await delaysRepository.clear()
+  const chat = await chatRepository.findOne(ctx.chat.id.toString())
+  await delaysRepository.remove(
+    await delaysRepository.find({
+      where: { colleague: { chat } },
+      relations: [`colleague`],
+    }),
+  )
 
   ctx.reply(`Список опозданий сброшен`)
 })
@@ -97,6 +104,10 @@ bot.command(`add`, async (ctx) => {
 
   const chat = await chatRepository.findOne(ctx.chat.id.toString())
   const name = ctx.message.text.split(` `).slice(1).join(` `)
+
+  if (!name) {
+    return ctx.reply(`Укажите коллегу`)
+  }
 
   try {
     await colleagueRepository.save({ name, chat })
